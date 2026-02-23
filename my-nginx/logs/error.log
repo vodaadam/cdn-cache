@@ -1,0 +1,1 @@
+2026/02/23 09:59:47 [error] 21595#0: *1 "/Users/adamvoda/skola/projekty/nginx/html/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost, request: "HEAD / HTTP/1.1", host: "127.0.0.1"
