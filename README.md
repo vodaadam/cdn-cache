@@ -26,3 +26,6 @@ ngx_hash_combined_t drží:
   - hash -> exact hash tabulku pro přesné názvy
   - wc_head -> wildcard suffix hash trie pro *.example.com
   - wc_tail -> wildcard prefix hash trie pro example.*
+
+
+time spent cca 7h
