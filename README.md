@@ -15,12 +15,14 @@ Vytvořil jsem si vlastní modul v adresáři /modules podle dokumentace, abych 
 Vytvořil jsem funkci ngx_x_cache_key_header_filter, která si vezme už hotový klíč z requestu (je volaná v post configuration, takže klíč už existuje) -> ten převede na hexadecimální číslo (32 bytů), udělá pushback na headers_out a pushback jí vrátí prázdný ngx_table_elt_t, do kterého vyplní už klíč a předá informaci, že to je hash.
 
 3)
-Je to hash trie.
+Pro hledání suffixů a prefixů se používá datová struktura hash trie, pro exact match normální hash tabulka.
 Proč tvůrci zvolili hash trie?
   - Šetří místo -> pokud by použili normální trie tak by museli v každém Nodu inicializovat velký array, který by byl často využit jen s pár procent
   - Rychlost -> místo arraye si každý node drží hash tabulku takže každý lookup je O(1)
+  
+
 Jak to je implementováno v Nginx?
   ngx_hash_combined_t drží:
-    - hash = exact hash tabulku pro přesné názvy,
-    - wc_head = wildcard suffix strukturu pro *.example.com,
-    - wc_tail = wildcard prefix strukturu pro example.*.
+    - hash -> exact hash tabulku pro přesné názvy
+    - wc_head -> wildcard suffix hash trie pro *.example.com
+    - wc_tail -> wildcard prefix hash trie pro example.*
