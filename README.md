@@ -1,7 +1,7 @@
 # cdn-cache
 
 1)
-Vyhledává podle klíče, který byl vytvořen hashováním proměnných requestu, např. $scheme$proxy_host$request_uri. Nejdříve se vezmou tyto proměnné a ve funkci ngx_http_proxy_create_key se naplní pole keys (typ ngx_array_t) ve struktuře r->cache (typ ngx_http_cache_t, ukazatel v ngx_http_request_s). Pole keys se pak použije ve funkci ngx_http_file_cache_create_key, kde se z něj vytvoří hash crc32 a pomocí MD5 klíč, který se pak používá při vyhledávání (viz níže). Crc32 se později používá při četení souboru, jako finální kontrola že nedošlo k md5 kolizi.
+Vyhledává podle klíče, který byl vytvořen hashováním proměnných requestu, např. $scheme$proxy_host$request_uri. Nejdříve se vezmou tyto proměnné a ve funkci ngx_http_proxy_create_key se naplní pole keys (typ ngx_array_t) ve struktuře r->cache (typ ngx_http_cache_t, ukazatel v ngx_http_request_s). Pole keys se pak použije ve funkci ngx_http_file_cache_create_key, kde se z něj vytvoří hash crc32 a pomocí MD5 klíč, který se pak používá při vyhledávání (viz níže). Crc32 se později používá při čtení souboru, jako finální kontrola že nedošlo k md5 kolizi a file tam tak ve skutečnosti není.
 Z hlediska paměťového umístění: r->cache, r->cache->keys a r->cache->key jsou per-request data, která po vykonání requestu zaniknou. Naopak keys_zone je sdílený paměťový segment, který po requestu nezaniká (data jsou uložena ve struktuře ngx_http_file_cache_sh_t, více viz níže).
 
 Struktura, která globálně drží informaci o tom, jaké cache položky jsou v konkrétní keys_zone, je ngx_http_file_cache_sh_t. Její konfigurace je uložená v ngx_http_file_cache_t. Jednotlivé klíče/položky jsou ngx_http_file_cache_node_t.
